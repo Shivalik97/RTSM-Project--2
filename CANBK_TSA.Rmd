@@ -33,10 +33,14 @@ plot(stock_price)
 plot(stock_ret)
 ```
 Analysis:
+
 Objective: To analyze the daily returns of CANBK.NS stock from 2018-01-01 to 2023-12-31.
+
 Analysis: Extracted the adjusted closing prices of CANBK.NS stock, calculated daily returns, and visualized them.
+
 Result:
 The 'CANBK.NS_return' plot displays the daily returns of CANBK.NS stock over the specified period.
+
 Implication: 
 The plot indicates the volatility and direction of daily returns for CANBK.NS stock during the given timeframe.
 Observations from the plot can help investors understand the historical performance and risk associated with CANBK.NS stock.
@@ -50,18 +54,15 @@ adf_test_stk_ret = adf.test(stock_ret); adf_test_stk_ret # Inference : Stock Dif
 ```
 Analysis:
 
-Objective: To conduct an Augmented Dickey-Fuller (ADF) test for stationarity on the daily returns of NESTLEIND.NS stock.
+Objective: To conduct an Augmented Dickey-Fuller (ADF) test for stationarity on the daily returns of CANBK.NS stock.
+
 Analysis: Performed the ADF test using the 'adf.test' function and obtained results.
+
 Result:
-The Augmented Dickey-Fuller test for stationarity on CANBK.NS daily returns yields the following results:
-  - Dickey-Fuller statistic: -10.017
-  - Lag order: 11
-  - p-value: 0.01
-  - Alternative hypothesis: Stationary
+- For the stock price time series, the Dickey-Fuller statistic is -1.1123 with a p-value of 0.9206. Given the high p-value (greater than the typical significance level of 0.05), we fail to reject the null hypothesis, suggesting that the stock price time series is non-stationary.
+- For the stock return time series, the Dickey-Fuller statistic is -10.017 with a p-value of 0.01. The low p-value (less than the typical significance level of 0.05) indicates that we can reject the null hypothesis, suggesting that the stock return time series is stationary.
 
-Implication: 
-The ADF test suggests that the daily returns of CANBK.NS stock are likely stationary. The small p-value (0.01) indicates evidence against the null hypothesis of non-stationarity. Therefore, we have reason to believe that the NESTLEIND.NS stock returns exhibit stationarity, which is important for certain time series analyses.
-
+Implication: The analysis reveals distinct characteristics of the stock price and stock return time series. The non-stationarity of the stock price time series implies that it has time-dependent structures such as trends or varying volatility, which are common in financial time series data. In contrast, the stationarity of the stock return time series suggests that its statistical properties do not change over time, making it more suitable for certain statistical modeling and forecasting techniques. Understanding the stationarity of financial time series is crucial for selecting appropriate models for analysis and forecasting in financial market studies.
 
 ```{r}
 # Ljung-Box Test for Autocorrelation - Stock Data
@@ -69,13 +70,14 @@ The ADF test suggests that the daily returns of CANBK.NS stock are likely statio
 
 lb_test_stk_ret = Box.test(stock_ret); lb_test_stk_ret # Inference : Stock Difference (Stationary) Time-Series is Autocorrelated
 
-
 ```
 
 Analysis:
 
 Objective: To perform a Ljung-Box test for autocorrelation on the daily returns of NESTLEIND.NS stock.
+
 Analysis: Conducted the Ljung-Box test using the 'Box.test' function and obtained results.
+
 Result:
 The Ljung-Box test for autocorrelation on CANBK.NS daily returns yields the following results:
   - X-squared statistic: 2.7664e-05
@@ -102,6 +104,36 @@ pacf(stock_ret) # PACF of Stock Return (Stationary) Series
 arma_pq_stk_ret = auto.arima(stock_ret); arma_pq_stk_ret
 arma_pq_stk = auto.arima(stock_price); arma_pq_stk
 ```
+Objective: To identify an optimal autoregressive integrated moving average (ARIMA) model for the stock return time series.
+
+Analysis: The auto.arima function was utilized to automatically select the best fitting ARIMA model for the stock return time series. This function iteratively explores various combinations of AR (autoregression), I (integration), and MA (moving average) components to find the model that best captures the time series data according to information criteria such as the Akaike Information Criterion (AIC), the corrected AIC (AICc), and the Bayesian Information Criterion (BIC).
+
+Result:
+- The auto.arima function identified an ARIMA(0,0,0) model with zero mean as the best fit for the stock return time series. This model, also known as a white noise model, indicates that there are no AR or MA components required to model the data effectively. The model parameters are as follows:
+    - sigma^2 (variance of the model's errors) = 0.001149
+    - Log likelihood = 2907.32
+    - AIC = -5810.63
+    - AICc = -5810.62
+    - BIC = -5800.03
+
+Implication: The selection of an ARIMA(0,0,0) model with zero mean suggests that the stock return time series behaves as a random walk or white noise process, where future values cannot be predictably determined from past values. This outcome reinforces the notion of market efficiency within the context of the analyzed data, indicating that the stock returns do not exhibit autocorrelations or patterns that could be exploited for predictive purposes. For financial analysts and investors, this model implies that traditional time series forecasting techniques may not be effective in predicting future returns of this stock, highlighting the importance of considering other factors or employing different strategies for investment decision-making.
+
+Arima 2
+Objective: To determine the most suitable ARIMA model for the stock price time series.
+
+Analysis: The auto.arima function, a tool designed to automatically identify the best ARIMA model, was applied to the stock price time series. This function assesses various combinations of the AR (autoregression), I (integration), and MA (moving average) parameters to select a model that optimally fits the data based on specific criteria, such as the Akaike Information Criterion (AIC), the corrected Akaike Information Criterion (AICc), and the Bayesian Information Criterion (BIC).
+
+Result:
+- The optimal ARIMA model identified for the stock price time series is an ARIMA(0,1,0). This model does not include any autoregressive (AR) or moving average (MA) components but indicates that differencing the data once (I=1) renders it stationary. The model parameters are detailed as follows:
+    - sigma^2 (the variance of the model's errors) = 49.67
+    - Log likelihood = -4909.86
+    - AIC = 9823.72
+    - AICc = 9823.073
+    - BIC = 9834.32
+
+Implication: The selection of an ARIMA(0,1,0) model suggests that the stock price series is a random walk with no predictable pattern in its fluctuations when differenced once. This characteristic is common in financial time series, supporting the hypothesis that stock prices follow a random walk and thus, their future prices are not directly predictable based on past values alone. For market participants, this finding underscores the challenge of forecasting future stock prices using historical price data alone and highlights the importance of incorporating a broader range of market analysis, financial indicators, and possibly, external economic factors for effective investment strategies.
+
+
 ```{r}
 # Ljung-Box Test for Autocorrelation - Model Residuals
 # ****************************************************
