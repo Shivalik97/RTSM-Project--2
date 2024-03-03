@@ -87,7 +87,7 @@ The Ljung-Box test for autocorrelation on CANBK.NS daily returns yields the foll
 Implication:
 The Ljung-Box test indicates significant autocorrelation in the CANBK.NS stock daily returns. The p-value is large (0.9958).Given the high p-value (greater than the typical significance level of 0.05), there is insufficient evidence to reject the null hypothesis, which suggests that the stock return time series does not exhibit significant autocorrelation at lag 1.
 
-Implication: The lack of significant autocorrelation in the stationary stock return time series implies that past returns are not a reliable predictor of future returns at the first lag. This characteristic is consistent with the Efficient Market Hypothesis (EMH), which posits that asset prices fully reflect all available information, making it difficult to achieve consistently higher returns than the market average. For traders and analysts, this result suggests that simple predictive models based on past returns may not be effective for forecasting future returns of this stock at the first lag. However, it's important to consider autocorrelation at other lags or incorporate additional variables or more sophisticated models for a comprehensive analysis.
+Action: The lack of significant autocorrelation in the stationary stock return time series implies that past returns are not a reliable predictor of future returns at the first lag. This characteristic is consistent with the Efficient Market Hypothesis (EMH), which posits that asset prices fully reflect all available information, making it difficult to achieve consistently higher returns than the market average. For traders and analysts, this result suggests that simple predictive models based on past returns may not be effective for forecasting future returns of this stock at the first lag. However, it's important to consider autocorrelation at other lags or incorporate additional variables or more sophisticated models for a comprehensive analysis.
 
 ```{r}
 # Autocorrelation Function (ACF) | Partial Autocorrelation Function (PACF)
@@ -153,6 +153,15 @@ plot(stock_ret_fpq)
 stock_fpq = forecast(arma_pq_stk, h = 40)
 plot(stock_fpq)
 ```
+```
+Objective: To examine the presence of autocorrelation in the residuals of the fitted ARIMA model for the stock return time series.
+
+Analysis: The Ljung-Box test, specifically the Box-Pierce version in this case, was conducted on the residuals of the ARIMA model fitted to the stock return time series. This statistical test is crucial for model diagnostics, aiming to detect any remaining autocorrelation in the residuals that could indicate a lack of fit or the potential for further model improvement. Autocorrelation in the residuals suggests that some pattern in the data has not been captured by the model, which could potentially be exploited for better predictions.
+
+Result:
+- The Ljung-Box test applied to the residuals of the ARIMA model yielded an X-squared value of  2.7664e-05 with 1 degree of freedom and a p-value of 0.9958 . Given the relatively high p-value (greater than the typical significance level of 0.05), there is insufficient evidence to reject the null hypothesis, indicating that the residuals do not exhibit significant autocorrelation at the first lag.
+
+Implication: The lack of significant autocorrelation in the residuals of the fitted ARIMA model for the stock return time series suggests that the model has adequately captured the underlying process generating the data. This result implies that the residuals are essentially random, as desired in a well-fitted time series model, indicating no obvious patterns or trends that the model failed to capture. For analysts and investors, this finding supports the reliability of the selected ARIMA(0,0,0) model with zero mean for forecasting purposes, underlining that the model residuals do not contain autocorrelations that could have been leveraged to improve the model further.
 ```{r}
 # Test for Volatility Clustering or Heteroskedasticity: Box Test 
 stk_ret_sq = arma_pq_stk_ret$residuals^2 # Return Variance (Since Mean Returns is approx. 0)
@@ -164,6 +173,21 @@ stk_ret_sq_box_test # Inference : Return Variance Series is Heteroskedastic (Has
 stk_ret_arch_test = ArchTest(arma_pq_stk_ret$residuals, lags = 10) # H0: No ARCH Effects
 stk_ret_arch_test # Inference : Return Series is Heteroskedastic (Has Volatility Clustering)
 ```
+Objective: To assess the presence of volatility clustering or heteroskedasticity in the stock return series, which indicates whether variances of the series change over time.
+
+Analysis: Two tests were conducted on the squared residuals of the fitted ARIMA model to the stock return series to detect volatility clustering or heteroskedasticity:
+
+1. **Box Test for Serial Correlation in Return Variance:** Squaring the residuals emphasizes variations in volatility, making it easier to detect patterns of volatility clustering. The Box-Pierce test, a form of the Ljung-Box test, was applied to these squared residuals with a lag of 10 to test for serial correlation.
+
+2. **ARCH (Autoregressive Conditional Heteroskedasticity) Test:** This test specifically looks for ARCH effects, where current period variances are dependent on the variances of previous periods, indicating volatility clustering.
+
+Result:
+- **Box-Pierce Test:** The test yielded an X-squared value of 463.06 with 10 degrees of freedom and a p-value less than 2.2e-16. This statistically significant result strongly rejects the null hypothesis, indicating that the return variance series is serially correlated, suggesting volatility clustering or heteroskedasticity.
+
+- **ARCH Test:** The ARCH test reported a Chi-squared value of 271.85 with 10 degrees of freedom and a p-value less than 2.2e-16. Similar to the Box-Pierce test, this result significantly rejects the null hypothesis of no ARCH effects, confirming the presence of heteroskedasticity or volatility clustering in the return series.
+
+Implication: The presence of volatility clustering or heteroskedasticity in the stock return series has significant implications for financial modeling and risk management. This phenomenon, where large changes in returns are likely to be followed by large changes (of either sign) and small changes by small changes, challenges the assumption of constant volatility used in many financial models, including the basic ARIMA model for returns. For investors and risk managers, acknowledging volatility clustering is crucial for accurate risk assessment, option pricing, and portfolio management. It suggests the need for models that can adapt to changing variances over time, such as GARCH (Generalized Autoregressive Conditional Heteroskedasticity) models, to better forecast future volatility and optimize investment strategies.
+
 ```{r}
 # GARCH Model
 garch_model1 = ugarchspec(variance.model = list(model = 'sGARCH', garchOrder = c(1,1)), mean.model = list(armaOrder = c(0,0), include.mean = TRUE))
