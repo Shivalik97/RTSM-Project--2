@@ -33,7 +33,6 @@ plot(stock_price)
 plot(stock_ret)
 ```
 Analysis:
-Objective: To analyze the daily returns of Analysis:
 Objective: To analyze the daily returns of CANBK.NS stock from 2018-01-01 to 2023-12-31.
 Analysis: Extracted the adjusted closing prices of CANBK.NS stock, calculated daily returns, and visualized them.
 Result:
