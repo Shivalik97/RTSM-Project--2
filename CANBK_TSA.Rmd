@@ -32,6 +32,16 @@ stock_ret = na.omit(diff(log(stock_price))) # Stock Returns
 plot(stock_price)
 plot(stock_ret)
 ```
+Analysis:
+Objective: To analyze the daily returns of Analysis:
+Objective: To analyze the daily returns of CANBK.NS stock from 2018-01-01 to 2023-12-31.
+Analysis: Extracted the adjusted closing prices of CANBK.NS stock, calculated daily returns, and visualized them.
+Result:
+The 'CANBK.NS_return' plot displays the daily returns of CANBK.NS stock over the specified period.
+Implication: 
+The plot indicates the volatility and direction of daily returns for CANBK.NS stock during the given timeframe.
+Observations from the plot can help investors understand the historical performance and risk associated with CANBK.NS stock.
+
 ```{r}
 # Augmented Dickey-Fuller (ADF) Test for Stationarity with Stock Data
 
