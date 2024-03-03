@@ -48,12 +48,46 @@ adf_test_stk_price = adf.test(stock_price); adf_test_stk_price  # Inference : St
 
 adf_test_stk_ret = adf.test(stock_ret); adf_test_stk_ret # Inference : Stock Difference Time-Series is Stationary
 ```
+Analysis:
+
+Objective: To conduct an Augmented Dickey-Fuller (ADF) test for stationarity on the daily returns of NESTLEIND.NS stock.
+Analysis: Performed the ADF test using the 'adf.test' function and obtained results.
+Result:
+The Augmented Dickey-Fuller test for stationarity on CANBK.NS daily returns yields the following results:
+  - Dickey-Fuller statistic: -10.017
+  - Lag order: 11
+  - p-value: 0.01
+  - Alternative hypothesis: Stationary
+
+Implication: 
+The ADF test suggests that the daily returns of CANBK.NS stock are likely stationary. The small p-value (0.01) indicates evidence against the null hypothesis of non-stationarity. Therefore, we have reason to believe that the NESTLEIND.NS stock returns exhibit stationarity, which is important for certain time series analyses.
+
+
 ```{r}
 # Ljung-Box Test for Autocorrelation - Stock Data
 # ***********************************************
 
 lb_test_stk_ret = Box.test(stock_ret); lb_test_stk_ret # Inference : Stock Difference (Stationary) Time-Series is Autocorrelated
 
+
+```
+
+Analysis:
+
+Objective: To perform a Ljung-Box test for autocorrelation on the daily returns of NESTLEIND.NS stock.
+Analysis: Conducted the Ljung-Box test using the 'Box.test' function and obtained results.
+Result:
+The Ljung-Box test for autocorrelation on CANBK.NS daily returns yields the following results:
+  - X-squared statistic: 2.7664e-05
+  - Degrees of freedom: 1
+  - p-value: 0.9958
+
+Implication:
+The Ljung-Box test indicates significant autocorrelation in the CANBK.NS stock daily returns. The p-value is large (0.9958).Given the high p-value (greater than the typical significance level of 0.05), there is insufficient evidence to reject the null hypothesis, which suggests that the stock return time series does not exhibit significant autocorrelation at lag 1.
+
+Implication: The lack of significant autocorrelation in the stationary stock return time series implies that past returns are not a reliable predictor of future returns at the first lag. This characteristic is consistent with the Efficient Market Hypothesis (EMH), which posits that asset prices fully reflect all available information, making it difficult to achieve consistently higher returns than the market average. For traders and analysts, this result suggests that simple predictive models based on past returns may not be effective for forecasting future returns of this stock at the first lag. However, it's important to consider autocorrelation at other lags or incorporate additional variables or more sophisticated models for a comprehensive analysis.
+
+```{r}
 # Autocorrelation Function (ACF) | Partial Autocorrelation Function (PACF)
 # *****************************************************************************
 
