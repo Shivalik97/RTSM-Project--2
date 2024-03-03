@@ -262,6 +262,20 @@ Additionally, an ARCH test performed on the squared residuals of a subsequent GA
 garch_modelf = ugarchspec(variance.model = list(model = 'sGARCH', garchOrder = c(1,1)), mean.model = list(armaOrder = c(4,5), include.mean = FALSE))
 stk_ret_garch = ugarchfit(garch_modelf, data = stock_ret); stk_ret_garch
 ```
+**Objective:** To analyze the time series dynamics of stock returns using a GARCH model.
+
+**Analysis:** In this part of the analysis, a GARCH(1,1) model combined with an ARFIMA(4,0,5) mean model is fitted to the stock return data. The model does not include a mean term in its specification. The analysis focuses on understanding the volatility and mean reversion characteristics of the stock returns, as well as testing for the presence of serial correlation, ARCH effects, and the stability of the model parameters.
+
+**Result:**
+- **Parameter Estimates:** The ARMA components (AR1 to AR4 and MA1 to MA5) show significant p-values, indicating that these parameters are statistically significant in explaining the stock return series. The GARCH parameters (omega, alpha1, beta1) also show significance except for the omega parameter under robust standard errors, suggesting that past shocks and volatility have a significant impact on current volatility.
+- **Volatility Dynamics:** The GARCH(1,1) parameters, alpha1 (0.084772) and beta1 (0.877655), suggest that the stock return volatility exhibits persistence, as indicated by the high beta1 value. This implies that shocks to volatility are likely to be persistent over time.
+- **Information Criteria:** The Akaike, Bayes, Shibata, and Hannan-Quinn information criteria suggest the model fits the data well, with lower values indicating a better fit.
+- **Serial Correlation Tests:** The Weighted Ljung-Box Test on standardized residuals does not reject the null hypothesis of no serial correlation, indicating that the model adequately captures the time series dynamics without leaving unexplained serial correlation in the residuals.
+- **ARCH Effects:** The Weighted ARCH LM Tests and the Weighted Ljung-Box Test on standardized squared residuals show mixed results on the presence of ARCH effects, with some p-values indicating significance. This suggests the need for further investigation into potential remaining ARCH effects in the residuals.
+- **Stability Tests:** The Nyblom stability test results indicate that the model parameters are stable over the sample period, as the joint and individual statistics do not exceed the critical values significantly.
+
+**Implication:** The analysis demonstrates that the specified GARCH model with an ARFIMA mean process is effective in capturing the dynamics of stock return volatility, with significant ARMA and GARCH effects indicating both mean reversion and volatility persistence. The model's adequacy is supported by the lack of serial correlation in the residuals and the parameter stability. However, the presence of potential ARCH effects in some tests suggests that the model's specification could be further refined to capture all dynamics present in the stock return series.
+
 ```{r}
 # GARCH Forecast
 stk_ret_garch_forecast1 = ugarchforecast(stk_ret_garch, n.ahead = 50); stk_ret_garch_forecast1
